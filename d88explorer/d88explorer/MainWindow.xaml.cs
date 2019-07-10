@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using d88lib;
 
 namespace d88explorer
 {
@@ -23,6 +25,15 @@ namespace d88explorer
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var bin = new VDisk(File.ReadAllBytes(@"N:\delme\n-sui001.d88"));
+            foreach (var item in bin.EnumFiles())
+            {
+                ListBoxMain.Items.Add(item.FileName);
+            }
         }
     }
 }

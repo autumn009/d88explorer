@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:d88explorer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="Window_Loaded">
     <Grid>
-        
+        <ListBox x:Name="ListBoxMain" HorizontalAlignment="Left" Height="376" VerticalAlignment="Top" Width="731"/>
+
     </Grid>
 </Window>
