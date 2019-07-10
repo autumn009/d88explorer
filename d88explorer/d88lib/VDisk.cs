@@ -86,15 +86,21 @@ namespace d88lib
         public readonly int AvailableTrack;
         public readonly int MaxSurfaces;
         private readonly int sectorSizeWithMiscHeader;
+        private readonly int sectorsInTrack;
 
         public int GetTrackOffset(int track)
         {
-            int offset = 0x22 + track * 4;
-            uint result = diskImage[offset+3]
-                + diskImage[offset + 2] * 256u
-                + diskImage[offset + 1] * 65536u
-                + diskImage[offset + 0] * 65536u * 256u;
+#if true
+            var bytesInTrack = sectorSizeWithMiscHeader * sectorsInTrack;
+            return 0x2b0 + track * bytesInTrack;
+#else
+            int offset = 0x20 + track * 4;
+            uint result = diskImage[offset+0]
+                + diskImage[offset + 1] * 256u
+                + diskImage[offset + 2] * 65536u
+                + diskImage[offset + 3] * 65536u * 256u;
             return (int)result;
+#endif
         }
 
         private int calcOffset(int trackNumber, int surfaceNumber, int sectorNumber)
@@ -231,15 +237,23 @@ namespace d88lib
         public VDisk(byte[] diskImage)
         {
             this.diskImage = diskImage;
-            int i;
-            for (i = 0; i < 164; i++) if (GetTrackOffset(i) == 0) break;
-            AvailableTrack = i;
+            switch (this.diskImage.Length)
+            {
+                case 348848:
+                    AvailableTrack = 80;
+                    break;
+                default:
+                    throw new ApplicationException(this.diskImage.Length + " is not supported file size.");
+            }
             switch (AvailableTrack)
             {
                 case 35:
                 case 40:
                 case 80:
+                    sectorsInTrack = 16;
+                    break;
                 case 77 * 2:
+                    sectorsInTrack = 26;
                     break;
                 default:
                     throw new ApplicationException(AvailableTrack + " is not supported tracks.");

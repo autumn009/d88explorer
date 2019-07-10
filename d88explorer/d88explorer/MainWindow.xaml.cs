@@ -34,6 +34,11 @@ namespace d88explorer
             {
                 ListBoxMain.Items.Add(item.FileName);
             }
+            var bin2 = new VDisk(File.ReadAllBytes(@"N:\oldFDs\pc8001\gamepack1.d88"));
+            foreach (var item in bin2.EnumFiles())
+            {
+                ListBoxMain.Items.Add(item.FileName);
+            }
         }
     }
 }
