@@ -8,7 +8,24 @@
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        <ListBox x:Name="ListBoxMain" HorizontalAlignment="Left" Height="376" VerticalAlignment="Top" Width="731"/>
-
+        <Menu VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <MenuItem Header="_File" >
+                <MenuItem Header="_New D88" />
+                <MenuItem Header="_Open D88" />
+                <MenuItem Header="_Save D88" />
+                <MenuItem Header="Save _As D88" />
+                <MenuItem Header="_Property D88" />
+                <MenuItem Header="E_xit" />
+            </MenuItem>
+            <MenuItem Header="_Edit" >
+                <MenuItem Header="Cut" />
+                <MenuItem Header="Copy" />
+                <MenuItem Header="Paste" />
+            </MenuItem>
+            <MenuItem Header="_Option">
+                <MenuItem Header="_Option" />
+            </MenuItem>
+        </Menu>
+        <ListBox x:Name="ListBoxMain" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,20,0,0"/>
     </Grid>
 </Window>
