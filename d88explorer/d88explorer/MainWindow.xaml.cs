@@ -27,18 +27,40 @@ namespace d88explorer
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private string currentFileName;
+        private VDisk currentVDisk;
+        private void loadD88(string fileName)
         {
-            var bin = new VDisk(File.ReadAllBytes(@"N:\delme\n-sui001.d88"));
-            foreach (var item in bin.EnumFiles())
+            try
+            {
+                currentVDisk = new VDisk(File.ReadAllBytes(fileName));
+                currentFileName = fileName;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(this, e.Message);
+            }
+        }
+        private void fillScreen()
+        {
+            if (currentVDisk == null) return;
+            ListBoxMain.Items.Clear();
+            foreach (var item in currentVDisk.EnumFiles())
             {
                 ListBoxMain.Items.Add(item.FileName);
             }
-            //var bin2 = new VDisk(File.ReadAllBytes(@"N:\oldFDs\pc8001\gamepack1.d88"));
-            //foreach (var item in bin2.EnumFiles())
-            //{
-            //ListBoxMain.Items.Add(item.FileName);
-            //}
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if( !CmdLnPaser.Parse() )
+            {
+                MessageBox.Show(this, CmdLnPaser.ErrorMessage);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(CmdLnPaser.FileName)) return;
+            loadD88(CmdLnPaser.FileName);
+            fillScreen();
         }
     }
 }
