@@ -44,10 +44,12 @@ namespace d88explorer
         private void fillScreen()
         {
             if (currentVDisk == null) return;
-            ListBoxMain.Items.Clear();
+            WrapPanelMain.Children.Clear();
             foreach (var item in currentVDisk.EnumFiles())
             {
-                ListBoxMain.Items.Add(item.FileName);
+                var checkbox = new CheckBox();
+                checkbox.Content = item.FileName;
+                WrapPanelMain.Children.Add(checkbox);
             }
         }
 
@@ -61,6 +63,22 @@ namespace d88explorer
             if (string.IsNullOrWhiteSpace(CmdLnPaser.FileName)) return;
             loadD88(CmdLnPaser.FileName);
             fillScreen();
+        }
+
+        private void checkAllCommon(bool mode)
+        {
+            foreach (var item in WrapPanelMain.Children)
+            {
+                CheckBox ch = item as CheckBox;
+                if (ch != null) ch.IsChecked = mode;
+            }
+        }
+
+        private void ButtonSelectAll_Click(object sender, RoutedEventArgs e) => checkAllCommon(true);
+        private void ButtonDeselectAll_Click(object sender, RoutedEventArgs e) => checkAllCommon(false);
+        private void ButtonCopyToFolder_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -8,7 +8,8 @@
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        <Menu VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <MenuItem Header="_File" >
                 <MenuItem Header="_New D88" />
                 <MenuItem Header="_Open D88" />
@@ -26,6 +27,14 @@
                 <MenuItem Header="_Option" />
             </MenuItem>
         </Menu>
-        <ListBox x:Name="ListBoxMain" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,20,0,0"/>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="LightGray">
+                <Button Margin="2" x:Name="ButtonSelectAll" Click="ButtonSelectAll_Click">Select All</Button>
+                <Button Margin="2" x:Name="ButtonDeselectAll" Click="ButtonDeselectAll_Click">Deselect All</Button>
+                <Button Margin="2" x:Name="ButtonCopyToFolder" Click="ButtonCopyToFolder_Click">Copy to folder</Button>
+            </StackPanel>
+            <TextBlock DockPanel.Dock="Bottom" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">Ststus Line Here</TextBlock>
+            <WrapPanel Orientation="Vertical" x:Name="WrapPanelMain" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+            </WrapPanel>
+        </DockPanel>
     </Grid>
 </Window>
