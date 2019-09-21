@@ -49,6 +49,13 @@ namespace d88explorer
             {
                 var checkbox = new CheckBox();
                 checkbox.Content = item.FileName;
+                checkbox.MouseDown += (sender, e) =>
+                {
+                    string[] files = { @"C:\delme\0903a.jpg" };
+                    var dataObject = new DataObject(DataFormats.FileDrop, files.ToArray());
+                    dataObject.SetData(DataFormats.StringFormat, dataObject);
+                    DragDrop.DoDragDrop(checkbox, dataObject, DragDropEffects.Copy);
+                };
                 WrapPanelMain.Children.Add(checkbox);
             }
         }
