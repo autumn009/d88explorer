@@ -31,6 +31,7 @@
                 <Button Margin="2" x:Name="ButtonSelectAll" Click="ButtonSelectAll_Click">Select All</Button>
                 <Button Margin="2" x:Name="ButtonDeselectAll" Click="ButtonDeselectAll_Click">Deselect All</Button>
                 <Button Margin="2" x:Name="ButtonCopyToFolder" Click="ButtonCopyToFolder_Click">Copy to folder</Button>
+                <Button Margin="2" x:Name="ButtonShowImageFolder" Click="ButtonShowImageFolder_Click">DEBUG: Show Temp Folder</Button>
             </StackPanel>
             <TextBlock DockPanel.Dock="Bottom" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">Ststus Line Here</TextBlock>
             <WrapPanel Orientation="Vertical" x:Name="WrapPanelMain" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >

@@ -29,29 +29,41 @@ namespace d88explorer
 
         private string currentFileName;
         private VDisk currentVDisk;
+        private TempDir currentTempDir;
+        private FileDetails[] currentImage;
         private void loadD88(string fileName)
         {
+#if false
             try
             {
-                currentVDisk = new VDisk(File.ReadAllBytes(fileName));
+#endif
+            currentVDisk = new VDisk(File.ReadAllBytes(fileName));
                 currentFileName = fileName;
+                currentTempDir = new TempDir();
+                currentImage = currentTempDir.CreateImage(currentVDisk);
+#if false
             }
             catch (Exception e)
             {
+                currentFileName = null;
+                currentVDisk = null;
+                currentTempDir = null;
+                currentImage = null;
                 MessageBox.Show(this, e.Message);
             }
-        }
+#endif
+            }
         private void fillScreen()
         {
-            if (currentVDisk == null) return;
+            if (currentImage == null) return;
             WrapPanelMain.Children.Clear();
-            foreach (var item in currentVDisk.EnumFiles())
+            foreach (var item in currentImage)
             {
                 var checkbox = new CheckBox();
-                checkbox.Content = item.FileName;
+                checkbox.Content = item.OriginalEntry.FileName;
                 checkbox.MouseDown += (sender, e) =>
                 {
-                    string[] files = { @"C:\delme\0903a.jpg" };
+                    string[] files = { item.HostFileSystemFullPath };
                     var dataObject = new DataObject(DataFormats.FileDrop, files.ToArray());
                     dataObject.SetData(DataFormats.StringFormat, dataObject);
                     DragDrop.DoDragDrop(checkbox, dataObject, DragDropEffects.Copy);
@@ -87,5 +99,7 @@ namespace d88explorer
         {
 
         }
+
+        private void ButtonShowImageFolder_Click(object sender, RoutedEventArgs e) => currentTempDir.ShowTempFolder();
     }
 }
