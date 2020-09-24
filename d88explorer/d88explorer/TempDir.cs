@@ -27,7 +27,7 @@ namespace d88explorer
         internal void ClearImage()
         {
             if (!IsTempFolderExist()) return;
-            Directory.Delete(tempFolderName);
+            Directory.Delete(tempFolderName,true);
             tempFolderName = null;
         }
         internal FileDetails[] CreateImage(VDisk vdisk)

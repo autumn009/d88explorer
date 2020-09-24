@@ -101,5 +101,10 @@ namespace d88explorer
         }
 
         private void ButtonShowImageFolder_Click(object sender, RoutedEventArgs e) => currentTempDir.ShowTempFolder();
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            currentTempDir.ClearImage();
+        }
     }
 }

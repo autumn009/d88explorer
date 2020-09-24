@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:d88explorer"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch">
