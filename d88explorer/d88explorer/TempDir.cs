@@ -79,7 +79,7 @@ namespace d88explorer
 
         internal void ShowTempFolder()
         {
-            System.Diagnostics.Process.Start("explorer.exe\""+tempFolderName+"\"");
+            System.Diagnostics.Process.Start("explorer.exe",tempFolderName);
         }
     }
 }
