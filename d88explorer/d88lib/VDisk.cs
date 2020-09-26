@@ -90,7 +90,6 @@ namespace d88lib
             {
                 bool done = false;
                 int offset = cluster * BytesPerSector * sectorsInCluster;
-                cluster = fat[cluster];
                 int sectors = sectorsInCluster;
                 if (cluster >= 0xc0)
                 {
@@ -99,6 +98,7 @@ namespace d88lib
                 }
                 writer(diskImage, offset, BytesPerSector * sectors);
                 if (done) break;
+                cluster = fat[cluster];
             }
         }
 
@@ -227,10 +227,10 @@ namespace d88lib
             int track, surface, sectorFirst, sectorLast;
             getFatSector(out track, out surface, out sectorFirst, out sectorLast);
             int maxClustors;
-            if (AvailableTrack == 77 * 2)
-                maxClustors = AvailableTrack * MaxSurfaces; // track == cluster
+            if (AvailableTrack == 77 * 2)   // in 8inch drive?
+                maxClustors = AvailableTrack; // track == cluster
             else
-                maxClustors = AvailableTrack * MaxSurfaces * 4; // track = 4cluster
+                maxClustors = AvailableTrack * 2; // track = 2cluster
             int offset, length;
             GetSectorDataOffsetAndLength(track, surface, sectorFirst, out offset, out length);
             var r = new byte[maxClustors];
