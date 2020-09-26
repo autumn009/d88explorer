@@ -82,6 +82,21 @@ namespace d88lib
             }
         }
 
+        private void ConvertClusterToTrackSurfaceSector(int cluster, out int track, out int surface, out int sector)
+        {
+            int clusterInTrack = sectorsInTrack / sectorsInCluster;
+            track = cluster / clusterInTrack / MaxSurfaces;
+            surface = (cluster / clusterInTrack) % MaxSurfaces;
+            sector = (cluster % clusterInTrack) * sectorsInCluster;
+        }
+
+        private int GetOffsetFromCluster(int cluster)
+        {
+            ConvertClusterToTrackSurfaceSector(cluster, out int track, out int surface, out int sector);
+            GetSectorDataOffsetAndLength(track, surface, sector, out int offset, out _);
+            return offset;
+        }
+
         public void EnumFileClusters(int firstFATNumber, Action<byte[], int, int> writer)
         {
             var fat = getFat();
@@ -89,7 +104,9 @@ namespace d88lib
             for (; ; )
             {
                 bool done = false;
-                int offset = cluster * BytesPerSector * sectorsInCluster;
+                //int offset = cluster * BytesPerSector * sectorsInCluster;
+                var offset = GetOffsetFromCluster(cluster);
+                cluster = fat[cluster];
                 int sectors = sectorsInCluster;
                 if (cluster >= 0xc0)
                 {
@@ -98,7 +115,6 @@ namespace d88lib
                 }
                 writer(diskImage, offset, BytesPerSector * sectors);
                 if (done) break;
-                cluster = fat[cluster];
             }
         }
 
