@@ -113,7 +113,11 @@ namespace d88lib
                     sectors = cluster - 0xc0;
                     done = true;
                 }
-                writer(diskImage, offset, BytesPerSector * sectors);
+                for (int i = 0; i < sectors; i++)
+                {
+                    writer(diskImage, offset, BytesPerSector);
+                    offset += BytesPerSector + 16;
+                }
                 if (done) break;
             }
         }
