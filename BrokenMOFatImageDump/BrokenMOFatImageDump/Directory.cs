@@ -29,7 +29,7 @@ namespace BrokenMOFatImageDump
 
         internal void Dump()
         {
-            Console.WriteLine(GetFileName());
+            Console.WriteLine($"{GetFileName():12} {FileSize:10} {Date:X4} {Time:X4} {Attributes:X2}");
         }
     }
 
@@ -63,6 +63,11 @@ namespace BrokenMOFatImageDump
                     if (c != 0) fx += ((char)c).ToString();
                 }
                 ent.FileExt = fx.Trim();
+                ent.Attributes = all[i + 0xb];
+                ent.Time = all[i + 0x16] + (all[i + 0x17] << 8);
+                ent.Date = all[i + 0x18] + (all[i + 0x19] << 8);
+                ent.FatEntry = all[i + 0x1a] + (all[i + 0x1b] << 8);
+                ent.FileSize = all[i + 0x1c] + (all[i + 0x1d] << 8) + (all[i + 0x1e] << 16) + (all[i + 0x1f] << 24);
                 if (Util.IsVerbose) ent.Dump();
             }
             dir.Entries = list.ToArray();
