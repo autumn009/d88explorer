@@ -45,7 +45,7 @@ namespace BrokenMOFatImageDump
                 Console.WriteLine($"NumberOfFATs={ipl.NumberOfFATs}");
                 Console.WriteLine($"TotalRootDirectories={ipl.TotalRootDirectories}");
                 Console.WriteLine($"TotalLogocalSectors={ipl.TotalLogocalSectors}");
-                Console.WriteLine($"MediaDescripter={ipl.MediaDescripter}");
+                Console.WriteLine($"MediaDescripter=0x{ipl.MediaDescripter:X2}");
                 Console.WriteLine($"TotalSectorsInOneFAT={ipl.TotalSectorsInOneFAT}");
             }
 
