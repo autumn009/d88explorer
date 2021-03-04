@@ -24,32 +24,62 @@ namespace BrokenMOFatImageDump
                         Console.WriteLine($"Volume Label Detected: {fullpath}");
                     }
                 }
-                if (Util.IsVerbose)
-                {
-                    Console.WriteLine($"Working: {fullpath}");
-                }
                 if (item.IsDirectory)
                 {
-                    // TBW
+                    // ignore . and ..
+                    if (item.GetFileName() == "." || item.GetFileName() == "..") continue;
+                    if (Util.IsVerbose)
+                    {
+                        Console.WriteLine($"Sub Directory: {fullpath}");
+                    }
+                    var list = new List<byte[]>();
+                    walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                    {
+                        list.Add(buf);
+                    }, true);
+                    var size = list.Select(c => c.Length).Sum();
+                    var ar = new byte[size];
+                    int p = 0;
+                    foreach (var partArray in list)
+                    {
+                        Array.Copy(partArray, 0, ar, p, partArray.Length);
+                        p += partArray.Length;
+                    }
+                    var subdir = Directory.LoadSubDir(stream, ar, ipl, fat);
+                    var newdir = Path.Combine(dstDir, item.GetFileName());
+                    System.IO.Directory.CreateDirectory(newdir);
+                    walkDirectory(stream, subdir, fat, ipl, newdir);
                 }
                 else
                 {
+                    if (Util.IsVerbose)
+                    {
+                        Console.WriteLine($"Working: {fullpath}");
+                    }
                     using var outputStream = File.Create(fullpath);
-                    walkCusters(stream, dir, fat, clusterBytes, item, outputStream, (buf)=> {
+                    walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                    {
                         outputStream.Write(buf, 0, buf.Length);
                     });
                 }
             }
 
-            static void walkCusters(FileStream stream, Directory dir, FAT fat, int clusterBytes, DirEnt item, FileStream outputStream, Action<byte[]> act)
+            static void walkCusters(FileStream stream, Directory dir, FAT fat, IPL ipl, int clusterBytes, DirEnt item, Action<byte[]> act, bool ignoreSize = false)
             {
                 var ent = item.FatEntry;
                 var left = item.FileSize;
                 for (; ; )
                 {
-                    if (left <= 0) break;
+                    if (!ignoreSize  && left <= 0) break;
                     stream.Seek((ent - 2) * clusterBytes + dir.DataAreaOffset, SeekOrigin.Begin);
-                    var s = Math.Min(clusterBytes, left);
+                    int s = clusterBytes;
+                    var nextFAT = fat.GetFat(ent);
+                    if (nextFAT >= 0xfff8 && nextFAT <= 0xffff)
+                    {
+                        s = (nextFAT - 0xfff8) * ipl.SectorLength;
+                    }
+
+                    if (!ignoreSize) s = Math.Min(clusterBytes, left);
                     var buf = new byte[s];
                     stream.Read(buf, 0, s);
                     act(buf);
