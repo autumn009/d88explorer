@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokenMOFatImageDump", "BrokenMOFatImageDump\BrokenMOFatImageDump.csproj", "{CFA99F1B-EBA5-45BB-88B0-C9DE9B323538}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFA99F1B-EBA5-45BB-88B0-C9DE9B323538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA99F1B-EBA5-45BB-88B0-C9DE9B323538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA99F1B-EBA5-45BB-88B0-C9DE9B323538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA99F1B-EBA5-45BB-88B0-C9DE9B323538}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A697FC1C-C0A5-4788-AF81-1363C45F0176}
+	EndGlobalSection
+EndGlobal
