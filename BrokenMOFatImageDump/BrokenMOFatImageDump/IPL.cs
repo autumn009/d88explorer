@@ -20,6 +20,8 @@ namespace BrokenMOFatImageDump
         public byte MediaDescripter;
         public int TotalSectorsInOneFAT;
 
+        internal int DataAreaOffset;
+
         internal static IPL Load(FileStream stream)
         {
             var ipl = new IPL();

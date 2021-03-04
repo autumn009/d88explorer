@@ -71,7 +71,7 @@ namespace BrokenMOFatImageDump
                 for (; ; )
                 {
                     if (!ignoreSize  && left <= 0) break;
-                    stream.Seek((ent - 2) * clusterBytes + dir.DataAreaOffset, SeekOrigin.Begin);
+                    stream.Seek((ent - 2) * clusterBytes + ipl.DataAreaOffset, SeekOrigin.Begin);
                     int s = clusterBytes;
                     var nextFAT = fat.GetFat(ent);
                     if (nextFAT >= 0xfff8 && nextFAT <= 0xffff)

@@ -43,7 +43,6 @@ namespace BrokenMOFatImageDump
     {
 
         internal DirEnt[] Entries;
-        internal int DataAreaOffset;
         private static Directory loadCommon(FileStream stream, int size, byte[] all)
         {
             var dir = new Directory();
@@ -75,7 +74,6 @@ namespace BrokenMOFatImageDump
                 if (Util.IsVerbose) ent.Dump();
                 if (ent.Attributes != 0x0f) list.Add(ent);
             }
-            dir.DataAreaOffset = (int)stream.Position;
             dir.Entries = list.ToArray();
             return dir;
         }
@@ -85,12 +83,15 @@ namespace BrokenMOFatImageDump
             var size = ipl.TotalRootDirectories * DirEnt.DirEntSize;
             byte[] all = new byte[size];
             stream.Read(all, 0, all.Length);
-            return loadCommon(stream, size, all);
+            var r = loadCommon(stream, size, all);
+            ipl.DataAreaOffset = (int)stream.Position;
+            return r;
         }
 
         internal static Directory LoadSubDir(FileStream stream, byte[] allEntries, IPL ipl, FAT fat)
         {
-            return loadCommon(stream, allEntries.Length, allEntries);
+            var r = loadCommon(stream, allEntries.Length, allEntries);
+            return r;
         }
     }
 }
