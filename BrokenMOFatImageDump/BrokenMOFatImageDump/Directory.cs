@@ -26,6 +26,12 @@ namespace BrokenMOFatImageDump
             }
             return $"{FileName}.{FileExt}";
         }
+        internal bool IsReadOnly => (Attributes & 0x01) != 0;
+        internal bool IsHidden => (Attributes & 0x02) != 0;
+        internal bool IsSystemFile => (Attributes & 0x04) != 0;
+        internal bool IsVolumeLabel => (Attributes & 0x08) != 0;
+        internal bool IsDirectory => (Attributes & 0x10) != 0;
+        internal bool IsArchive => (Attributes & 0x20) != 0;
 
         internal void Dump()
         {
@@ -37,6 +43,7 @@ namespace BrokenMOFatImageDump
     {
 
         internal DirEnt[] Entries;
+        internal int DataAreaOffset;
         internal static Directory LoadRoot(FileStream stream, IPL ipl, FAT fat)
         {
             var dir = new Directory();
@@ -71,6 +78,7 @@ namespace BrokenMOFatImageDump
                 if (Util.IsVerbose) ent.Dump();
                 if (ent.Attributes != 0x0f) list.Add(ent);
             }
+            dir.DataAreaOffset = (int)stream.Position;
             dir.Entries = list.ToArray();
             return dir;
         }

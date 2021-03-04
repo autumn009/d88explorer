@@ -13,17 +13,41 @@ namespace BrokenMOFatImageDump
     {
         private static void walkDirectory(FileStream stream, Directory dir, FAT fat, IPL ipl, string dstDir)
         {
+            int clusterBytes = ipl.SectorLength * ipl.ClusterPerSector;
             foreach (var item in dir.Entries)
             {
                 var fullpath = Path.Combine(dstDir, item.GetFileName());
+                if (item.IsVolumeLabel)
+                {
+                    if (Util.IsVerbose)
+                    {
+                        Console.WriteLine($"Volume Label Detected: {fullpath}");
+                    }
+                }
                 if (Util.IsVerbose)
                 {
                     Console.WriteLine($"Working: {fullpath}");
                 }
-                
-
-
-
+                if (item.IsDirectory)
+                {
+                    // TBW
+                }
+                else
+                {
+                    using var outputStream = File.Create(fullpath);
+                    var ent = item.FatEntry;
+                    var left = item.FileSize;
+                    for(; ; )
+                    {
+                        if (left <= 0) break;
+                        stream.Seek((ent-2) * clusterBytes+dir.DataAreaOffset, SeekOrigin.Begin);
+                        var s = Math.Min(clusterBytes, left);
+                        var buf = new byte[s];
+                        stream.Read(buf, 0, s);
+                        outputStream.Write(buf, 0, buf.Length);
+                        left -= s;
+                    }
+                }
             }
         }
         internal static void Dump(string filename)
