@@ -46,6 +46,10 @@ namespace BrokenMOFatImageDump
                         stream.Read(buf, 0, s);
                         outputStream.Write(buf, 0, buf.Length);
                         left -= s;
+                        ent = fat.GetFat(ent);
+                        // 必要ないはずであるが念のために入れてある
+                        // 無効クラスタ番号が出てきたら終了
+                        if (ent < 2 || ent > 0xffef) break;
                     }
                 }
             }
