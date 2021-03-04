@@ -35,7 +35,7 @@ namespace BrokenMOFatImageDump
             ipl.TotalRootDirectories = ipl.sector[0x11] + (ipl.sector[0x12] << 8);
             ipl.TotalLogocalSectors = ipl.sector[0x13] + (ipl.sector[0x14] << 8);
             ipl.MediaDescripter = ipl.sector[0x15];
-            ipl.TotalSectorsInOneFAT = ipl.sector[016] + (ipl.sector[0x17] << 8);
+            ipl.TotalSectorsInOneFAT = ipl.sector[0x16] + (ipl.sector[0x17] << 8);
 
             if (Util.IsVerbose)
             {
