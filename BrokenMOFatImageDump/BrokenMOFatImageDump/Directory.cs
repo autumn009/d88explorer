@@ -18,6 +18,17 @@ namespace BrokenMOFatImageDump
         internal int FatEntry;
         internal int FileSize;
 
+        internal DateTime GetDateTime()
+        {
+            int year = ((Date >> 9) & 0x7f) + 1980;
+            int month = (Date >> 5) & 0xf;
+            int day = Date & 0x1f;
+            int hour = (Time >> 11) & 0x1f;
+            int minutes = (Time >> 5) & 0x3f;
+            int second = Time & 0x1f;
+            return new DateTime(year, month, day, hour, minutes, second);
+        }
+
         internal string GetFileName()
         {
             if( string.IsNullOrWhiteSpace(FileExt))

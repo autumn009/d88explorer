@@ -56,11 +56,14 @@ namespace BrokenMOFatImageDump
                     {
                         Console.WriteLine($"Working: {fullpath}");
                     }
-                    using var outputStream = File.Create(fullpath);
-                    walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                    using (var outputStream = File.Create(fullpath))
                     {
-                        outputStream.Write(buf, 0, buf.Length);
-                    });
+                        walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                        {
+                            outputStream.Write(buf, 0, buf.Length);
+                        });
+                    }
+                    File.SetLastWriteTime(fullpath, item.GetDateTime());
                 }
             }
 
