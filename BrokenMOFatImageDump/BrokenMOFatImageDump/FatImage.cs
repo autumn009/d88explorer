@@ -35,22 +35,29 @@ namespace BrokenMOFatImageDump
                 else
                 {
                     using var outputStream = File.Create(fullpath);
-                    var ent = item.FatEntry;
-                    var left = item.FileSize;
-                    for(; ; )
-                    {
-                        if (left <= 0) break;
-                        stream.Seek((ent-2) * clusterBytes+dir.DataAreaOffset, SeekOrigin.Begin);
-                        var s = Math.Min(clusterBytes, left);
-                        var buf = new byte[s];
-                        stream.Read(buf, 0, s);
+                    walkCusters(stream, dir, fat, clusterBytes, item, outputStream, (buf)=> {
                         outputStream.Write(buf, 0, buf.Length);
-                        left -= s;
-                        ent = fat.GetFat(ent);
-                        // 必要ないはずであるが念のために入れてある
-                        // 無効クラスタ番号が出てきたら終了
-                        if (ent < 2 || ent > 0xffef) break;
-                    }
+                    });
+                }
+            }
+
+            static void walkCusters(FileStream stream, Directory dir, FAT fat, int clusterBytes, DirEnt item, FileStream outputStream, Action<byte[]> act)
+            {
+                var ent = item.FatEntry;
+                var left = item.FileSize;
+                for (; ; )
+                {
+                    if (left <= 0) break;
+                    stream.Seek((ent - 2) * clusterBytes + dir.DataAreaOffset, SeekOrigin.Begin);
+                    var s = Math.Min(clusterBytes, left);
+                    var buf = new byte[s];
+                    stream.Read(buf, 0, s);
+                    act(buf);
+                    left -= s;
+                    ent = fat.GetFat(ent);
+                    // 必要ないはずであるが念のために入れてある
+                    // 無効クラスタ番号が出てきたら終了
+                    if (ent < 2 || ent > 0xffef) break;
                 }
             }
         }
