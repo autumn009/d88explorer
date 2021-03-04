@@ -69,6 +69,7 @@ namespace BrokenMOFatImageDump
                 ent.FatEntry = all[i + 0x1a] + (all[i + 0x1b] << 8);
                 ent.FileSize = all[i + 0x1c] + (all[i + 0x1d] << 8) + (all[i + 0x1e] << 16) + (all[i + 0x1f] << 24);
                 if (Util.IsVerbose) ent.Dump();
+                if (ent.Attributes != 0x0f) list.Add(ent);
             }
             dir.Entries = list.ToArray();
             return dir;
