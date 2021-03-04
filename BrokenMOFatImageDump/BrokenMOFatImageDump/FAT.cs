@@ -10,6 +10,12 @@ namespace BrokenMOFatImageDump
     class FAT
     {
         private byte[] fatall;
+        internal int GetFat(int index)
+        {
+            var offset = index * 2;
+            return fatall[offset] + (fatall[offset + 1] << 8);
+        }
+
         internal static FAT Load(FileStream stream, IPL ipl)
         {
             var fat = new FAT();
