@@ -63,20 +63,8 @@ namespace BrokenMOFatImageDump
                 if (all[i] == 0) break;
                 if (all[i] == 0xe5) continue;
                 var ent = new DirEnt();
-                string fn = "";
-                for (int j = 0; j < 8; j++)
-                {
-                    var c = all[i + j];
-                    if (c != 0) fn += ((char)c).ToString();
-                }
-                ent.FileName = fn.Trim();
-                string fx = "";
-                for (int j = 0; j < 3; j++)
-                {
-                    var c = all[i + 8 + j];
-                    if (c != 0) fx += ((char)c).ToString();
-                }
-                ent.FileExt = fx.Trim();
+                ent.FileName = Util.SJ2String(all, i, 8).Trim();
+                ent.FileExt = Util.SJ2String(all, i + 8, 3).Trim();
                 ent.Attributes = all[i + 0xb];
                 ent.Time = all[i + 0x16] + (all[i + 0x17] << 8);
                 ent.Date = all[i + 0x18] + (all[i + 0x19] << 8);
