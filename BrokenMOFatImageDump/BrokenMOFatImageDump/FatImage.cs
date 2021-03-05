@@ -37,6 +37,9 @@ namespace BrokenMOFatImageDump
                     {
                         list.Add(buf);
                     }, true);
+                    if (list.Count > 0)
+                    {
+                    }
                     var size = list.Select(c => c.Length).Sum();
                     var ar = new byte[size];
                     int p = 0;
@@ -46,6 +49,14 @@ namespace BrokenMOFatImageDump
                         p += partArray.Length;
                     }
                     var subdir = Directory.LoadSubDir(stream, ar, ipl, fat);
+                    if (subdir == null)
+                    {
+                        var s = $"Waring: Directory {item.GetFileName()} may borken skipped!";
+                        Util.Messages.Add(s);
+                        Console.WriteLine(s);
+                        continue;
+                    }
+                    if (subdir.Entries.Length == 0) continue;
                     var newdir = Path.Combine(dstDir, item.GetFileName());
                     System.IO.Directory.CreateDirectory(newdir);
                     walkDirectory(stream, subdir, fat, ipl, newdir);

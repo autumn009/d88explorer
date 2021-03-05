@@ -9,6 +9,7 @@ namespace BrokenMOFatImageDump
     class Util
     {
         internal static readonly bool IsVerbose = true;
+        internal static List<string> Messages = new List<string>();
 
         internal static string SJ2String(byte[] ar, int start, int length)
         {
@@ -16,6 +17,7 @@ namespace BrokenMOFatImageDump
         }
         static Util()
         {
+            Messages.Clear();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
     }

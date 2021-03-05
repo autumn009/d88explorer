@@ -12,6 +12,10 @@ namespace BrokenMOFatImageDump
                 return;
             }
             FatImage.Dump(args[0]);
+            foreach (var item in Util.Messages)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }
