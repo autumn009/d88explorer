@@ -33,13 +33,10 @@ namespace BrokenMOFatImageDump
                         Console.WriteLine($"Sub Directory: {fullpath}");
                     }
                     var list = new List<byte[]>();
-                    walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                    walkClusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
                     {
                         list.Add(buf);
                     }, true);
-                    if (list.Count > 0)
-                    {
-                    }
                     var size = list.Select(c => c.Length).Sum();
                     var ar = new byte[size];
                     int p = 0;
@@ -69,7 +66,7 @@ namespace BrokenMOFatImageDump
                     }
                     using (var outputStream = File.Create(fullpath))
                     {
-                        walkCusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
+                        walkClusters(stream, dir, fat, ipl, clusterBytes, item, (buf) =>
                         {
                             outputStream.Write(buf, 0, buf.Length);
                         });
@@ -78,14 +75,15 @@ namespace BrokenMOFatImageDump
                 }
             }
 
-            static void walkCusters(FileStream stream, Directory dir, FAT fat, IPL ipl, int clusterBytes, DirEnt item, Action<byte[]> act, bool ignoreSize = false)
+            static void walkClusters(FileStream stream, Directory dir, FAT fat, IPL ipl, int clusterBytes, DirEnt item, Action<byte[]> act, bool ignoreSize = false)
             {
                 var ent = item.FatEntry;
                 var left = item.FileSize;
                 for (; ; )
                 {
                     if (!ignoreSize  && left <= 0) break;
-                    stream.Seek((ent - 2) * clusterBytes + ipl.DataAreaOffset, SeekOrigin.Begin);
+                    var offset = Util.OffsetFixer((ent - 2) * clusterBytes + ipl.DataAreaOffset);
+                    stream.Seek(offset, SeekOrigin.Begin);
                     int s = clusterBytes;
                     var nextFAT = fat.GetFat(ent);
                     if (nextFAT >= 0xfff8 && nextFAT <= 0xffff)

@@ -63,9 +63,9 @@ namespace BrokenMOFatImageDump
                 if (all[i] == 0) break;
                 if (all[i] == 0xe5) continue;
                 // may be broken
-                if (all[i] == 0xcf && all[i + 1] == 0x23) return null;
+                //if (all[i] == 0xcf && all[i + 1] == 0x23) return null;
                 // may be broken
-                if (all[i+8] >= 0x80 && all[i + 9] >= 0x80 && all[i + 10] >= 0x80) return null;
+                //if (all[i+8] >= 0x80 && all[i + 9] >= 0x80 && all[i + 10] >= 0x80) return null;
                 var ent = new DirEnt();
                 ent.FileName = Util.SJ2String(all, i, 8).Trim();
                 ent.FileExt = Util.SJ2String(all, i + 8, 3).Trim();
