@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -28,6 +29,8 @@ namespace BrokenMOFatImageDump
                 {
                     // ignore . and ..
                     if (item.GetFileName() == "." || item.GetFileName() == "..") continue;
+                    // ignore "System Volume"
+                    if (item.GetFileName() == "SYSTEM~1") continue;
                     if (Util.IsVerbose)
                     {
                         Console.WriteLine($"Sub Directory: {fullpath}");
@@ -79,21 +82,41 @@ namespace BrokenMOFatImageDump
             {
                 var ent = item.FatEntry;
                 var left = item.FileSize;
+#if DEBUG
+                if (ignoreSize) Console.WriteLine("Start Reading SubDir");
+#endif
                 for (; ; )
                 {
-                    if (!ignoreSize  && left <= 0) break;
+                    if (!ignoreSize && left <= 0) break;
                     var offset = Util.OffsetFixer((ent - 2) * clusterBytes + ipl.DataAreaOffset);
                     stream.Seek(offset, SeekOrigin.Begin);
                     int s = clusterBytes;
-                    var nextFAT = fat.GetFat(ent);
-                    if (nextFAT >= 0xfff8 && nextFAT <= 0xffff)
-                    {
-                        s = (nextFAT - 0xfff8) * ipl.SectorLength;
-                    }
+
+                    //var nextFAT = fat.GetFat(ent);
+                    //if (nextFAT >= 0xfff8 && nextFAT <= 0xffff)
+                    //{
+                    //s = (nextFAT - 0xfff8) * ipl.SectorLength;
+                    //}
 
                     if (!ignoreSize) s = Math.Min(clusterBytes, left);
+#if DEBUG
+                    if (ignoreSize) System.Diagnostics.Debug.Assert(s <= 2048);
+                    if (ignoreSize) Console.WriteLine($"cluster=0x{ent:X4} offset=0x{offset:X8} s={s}");
+#endif
                     var buf = new byte[s];
                     stream.Read(buf, 0, s);
+#if DEBUG
+                    var tgt = "StartFon";
+                    for (int j = 0; j < 512; j += 32)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if (buf[i + j] != tgt[i]) goto ok;
+                        }
+                    }
+                    if (ignoreSize) System.Diagnostics.Debug.Fail("StartFon");
+                    ok:
+#endif
                     act(buf);
                     left -= s;
                     ent = fat.GetFat(ent);
