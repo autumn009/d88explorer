@@ -26,7 +26,7 @@ namespace BrokenMOFatImageDump
                 nibbleBuf[p++] = (byte)(fatall[i] & 0xf);
                 nibbleBuf[p++] = (byte)(fatall[i] >> 4);
             }
-            byte[] fat12Buf = new byte[nibbleBuf.Length / 3 + 2];
+            byte[] fat12Buf = new byte[nibbleBuf.Length / 3 * 2];
             int np = 0;
             for (int i = 0; i < fat12Buf.Length / 2; i++)
             {
