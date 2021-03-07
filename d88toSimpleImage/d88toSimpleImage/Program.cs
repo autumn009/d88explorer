@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace d88toSimpleImage
 {
@@ -9,13 +10,16 @@ namespace d88toSimpleImage
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("usage: d88toSimpleImage SRC_FILES_WITH_WILDCARD");
-                Console.WriteLine("Cobver *.d88 to *.disk (DD Disk Image)");
+                Console.WriteLine("usage: d88toSimpleImage [-9] SRC_FILES_WITH_WILDCARD");
+                Console.WriteLine("Convert *.d88 to *.disk (DD Disk Image)");
+                Console.WriteLine("-9: remove sector 9 with 0xe5");
                 return;
             }
-            foreach (var oathWithWildCard in args)
+            bool isRemove9 = args.Any(c => c == "-9");
+            foreach (var pathWithWildCard in args)
             {
-                foreach (var fullpath in Directory.GetFiles(Path.GetDirectoryName(oathWithWildCard), Path.GetFileName(oathWithWildCard)))
+                if (pathWithWildCard == "-9") continue;
+                foreach (var fullpath in Directory.GetFiles(Path.GetDirectoryName(pathWithWildCard), Path.GetFileName(pathWithWildCard)))
                 {
                     convertIt(fullpath);
                 }
@@ -63,7 +67,19 @@ namespace d88toSimpleImage
                         sectorOffset += 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 5 + 2;
                         //System.Diagnostics.Debug.Assert(sectorOffset + size < srcImage.Length);
                         //if (sectorOffset + size >= srcImage.Length) break;
-                        outStream.Write(srcImage, sectorOffset, size);
+                        bool writeFlag = true;
+                        if (isRemove9 && sectors == 8)
+                        {
+                            for (int i = 0; i < size; i++)
+                            {
+                                if (srcImage[sectorOffset + i] != 0xe5)
+                                {
+                                    throw new ApplicationException($"Sector 9 has not 0xe5 in track {track}");
+                                }
+                            }
+                            writeFlag = false;
+                        }
+                        if(writeFlag) outStream.Write(srcImage, sectorOffset, size);
                         sectorOffset += size;
                         sectors++;
                     }
