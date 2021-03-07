@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "d88explorer", "d88explorer\d88explorer.csproj", "{2529AAB2-F216-47F5-982D-C272C9149583}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "d88lib", "d88lib\d88lib.csproj", "{2B41AD30-9292-45B2-93B7-550F87C64474}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "d88ExtractorForNecDiskBasic", "d88ExtractorForNecDiskBasic\d88ExtractorForNecDiskBasic.csproj", "{CB8B3ADD-6224-4F3B-977D-B0FE7E1E79E5}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2529AAB2-F216-47F5-982D-C272C9149583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2529AAB2-F216-47F5-982D-C272C9149583}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2529AAB2-F216-47F5-982D-C272C9149583}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2529AAB2-F216-47F5-982D-C272C9149583}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B41AD30-9292-45B2-93B7-550F87C64474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B41AD30-9292-45B2-93B7-550F87C64474}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B41AD30-9292-45B2-93B7-550F87C64474}.Release|Any CPU.ActiveCfg = Release|Any CPU
