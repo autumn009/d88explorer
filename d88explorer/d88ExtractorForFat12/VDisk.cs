@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace d88ExtractorForFat12
 {
+    public enum ETypeOfDisk
+    {
+        Type2D = 0,
+        Type2DD = 0x10,
+        Type2HD = 0x20
+    }
+    public enum EDensity
+    {
+        DoubleDensoty = 0,
+        HighDensoty = 1,
+        SingleDensoty = 0x40
+    }
     public class DirectoryEntry
     {
         public readonly int Id;
@@ -35,6 +47,7 @@ namespace d88ExtractorForFat12
         public readonly int Sector;
         public readonly int BytesInSectorN;
         public readonly int SectorsInTrack;
+        public readonly EDensity Density;
         public readonly bool IsDeletedData;
         public readonly int Status;
         public readonly int Length;
