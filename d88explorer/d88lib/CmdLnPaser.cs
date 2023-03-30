@@ -13,7 +13,7 @@ namespace d88lib
             {
                 if( item.StartsWith("-"))
                 {
-                    ErrorMessage = $"{item} is not a valud iption";
+                    ErrorMessage = $"{item} is not a valid option";
                     return false;
                 }
                 FileName = item;
