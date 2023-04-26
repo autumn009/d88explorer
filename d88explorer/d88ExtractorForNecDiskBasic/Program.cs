@@ -31,7 +31,7 @@ namespace d88ExtractorForNecDiskBasic
             }
             foreach (var pathWithWildCard in list)
             {
-                foreach (var fullpath in Directory.GetFiles(Path.GetDirectoryName(pathWithWildCard), Path.GetFileName(pathWithWildCard)))
+                foreach (var fullpath in Directory.GetFiles(Path.GetDirectoryName(pathWithWildCard), Path.GetFileName(pathWithWildCard), SearchOption.AllDirectories))
                 {
                     VDisk currentVDisk = new VDisk(File.ReadAllBytes(fullpath));
                     var outputDirectoryName = Path.Combine(dst,Path.GetFileNameWithoutExtension(fullpath));
