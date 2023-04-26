@@ -19,8 +19,40 @@ namespace d88ExtractorForNecDiskBasic
     {
         private string tempFolderName;
 
-        internal FileDetails[] CreateImage(VDisk vdisk)
+        private bool validateFat(VDisk vdisk)
         {
+            byte[] fat = vdisk.GetFat();
+            for (int i = 0; i < fat.Length; i++)
+            {
+                if (fat[i] == 0xff) continue;
+                if (fat[i] == 0xfe) continue;
+                if (fat[i] >= 0xc1) continue;
+                if (fat[i] < fat.Length)
+                {
+                    // chain checker
+                    var j = fat[i];
+                    for (; ; )
+                    {
+                        if (fat[j] == 0xff) return false;
+                        if (fat[j] == 0xfe) return false;
+                        if (fat[j] >= 0xc1) break;
+                        if (fat[j] >= fat.Length) return false;
+                        j = fat[j];
+                    }
+                }
+                else return false;
+            }
+            return true;
+        }
+
+        internal FileDetails[] CreateImage(VDisk vdisk, string src)
+        {
+            if(!validateFat(vdisk))
+            {
+                Console.WriteLine($"{src} may not a NEC format, Skipped");
+                return null;
+            }
+
             Directory.CreateDirectory(tempFolderName);
             var details = new List<FileDetails>();
             foreach (var item in vdisk.EnumFiles())

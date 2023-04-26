@@ -37,7 +37,7 @@ namespace d88ExtractorForNecDiskBasic
                     var outputDirectoryName = Path.Combine(dst,Path.GetFileNameWithoutExtension(fullpath));
                     if (dst == null) outputDirectoryName = Path.ChangeExtension(fullpath, null);
                     TempDir currentTempDir = new TempDir(outputDirectoryName);
-                    FileDetails[] dummyCurrentImage = currentTempDir.CreateImage(currentVDisk);
+                    FileDetails[] dummyCurrentImage = currentTempDir.CreateImage(currentVDisk, fullpath);
                 }
             }
         }

@@ -99,7 +99,7 @@ namespace d88lib
 
         public void EnumFileClusters(int firstFATNumber, Action<byte[], int, int> writer)
         {
-            var fat = getFat();
+            var fat = GetFat();
             int cluster = firstFATNumber;
             for (; ; )
             {
@@ -242,7 +242,7 @@ namespace d88lib
             }
         }
 
-        private byte[] getFat()
+        public byte[] GetFat()
         {
             int track, surface, sectorFirst, sectorLast;
             getFatSector(out track, out surface, out sectorFirst, out sectorLast);
@@ -262,7 +262,7 @@ namespace d88lib
         {
             int track, surface, sectorFirst, sectorLast;
             getDirectorySector(out track, out surface, out sectorFirst, out sectorLast);
-            var fat = getFat();
+            var fat = GetFat();
             bool done = false;
             int id = 0;
             for (int sector = sectorFirst; sector <= sectorLast; sector++)
