@@ -31,13 +31,20 @@ namespace d88ExtractorForNecDiskBasic
             }
             foreach (var pathWithWildCard in list)
             {
-                foreach (var fullpath in Directory.GetFiles(Path.GetDirectoryName(pathWithWildCard), Path.GetFileName(pathWithWildCard), SearchOption.AllDirectories))
+                foreach (var fullpath in Directory.EnumerateFiles(Path.GetDirectoryName(pathWithWildCard), Path.GetFileName(pathWithWildCard), SearchOption.AllDirectories))
                 {
-                    VDisk currentVDisk = new VDisk(File.ReadAllBytes(fullpath));
-                    var outputDirectoryName = Path.Combine(dst,Path.GetFileNameWithoutExtension(fullpath));
-                    if (dst == null) outputDirectoryName = Path.ChangeExtension(fullpath, null);
-                    TempDir currentTempDir = new TempDir(outputDirectoryName);
-                    FileDetails[] dummyCurrentImage = currentTempDir.CreateImage(currentVDisk, fullpath);
+                    try
+                    {
+                        VDisk currentVDisk = new VDisk(File.ReadAllBytes(fullpath));
+                        var outputDirectoryName = Path.Combine(dst, Path.GetFileNameWithoutExtension(fullpath));
+                        if (dst == null) outputDirectoryName = Path.ChangeExtension(fullpath, null);
+                        TempDir currentTempDir = new TempDir(outputDirectoryName);
+                        FileDetails[] dummyCurrentImage = currentTempDir.CreateImage(currentVDisk, fullpath);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"{ex.Message} in {fullpath}, Skipped");
+                    }
                 }
             }
         }

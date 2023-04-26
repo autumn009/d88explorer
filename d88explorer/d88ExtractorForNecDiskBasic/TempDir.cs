@@ -31,6 +31,7 @@ namespace d88ExtractorForNecDiskBasic
                 {
                     // chain checker
                     var j = fat[i];
+                    int counter = 0;
                     for (; ; )
                     {
                         if (fat[j] == 0xff) return false;
@@ -38,6 +39,8 @@ namespace d88ExtractorForNecDiskBasic
                         if (fat[j] >= 0xc1) break;
                         if (fat[j] >= fat.Length) return false;
                         j = fat[j];
+                        counter++;
+                        if (counter >= fat.Length) return false;
                     }
                 }
                 else return false;
