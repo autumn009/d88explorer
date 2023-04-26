@@ -35,22 +35,17 @@ namespace d88ExtractorForNecDiskBasic
 
         internal static string ConvertD88FileNameToHostFileName(string filename)
         {
-            var body = Path.GetFileNameWithoutExtension(filename);
-            var ext = Path.GetExtension(filename);
+            var body = filename.Substring(0, 6).Trim();
             var bodyLower = body.ToLower();
-            if (badNames.Any(c => c == bodyLower)) filename = body + "_" + ext;
-
+            if (badNames.Any(c => c == bodyLower)) body = body + "_";
+            var ext = filename.Substring(6).Trim();
             var sb = new StringBuilder();
-            foreach (var item in filename)
+            foreach (var item in body + "." + ext)
             {
                 if (badCharacters.Contains(item))
-                {
                     sb.AppendFormat("%{0:X2}", (int)item);
-                }
                 else
-                {
                     sb.Append(item);
-                }
             }
             return sb.ToString();
         }
